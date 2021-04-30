@@ -1,0 +1,81 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div>
+        <div style="float: left;">
+            <h1 style="display:inline">{{ info.title }}</h1><p style="display:inline">({{ info.category }})</p>
+            <a href="{% url 'watchlistpage' title=info.title tit=watch_title num=info.item_num%}">{{ watch_title }}</a>
+        </div>
+        {% if owner_vali %}
+        <div style="float: right;">
+            <a href="{% url 'close_auct' title=info.title num=info.item_num %}"><strong>Close Auction</strong></a>
+        </div>
+
+        {% else %}
+        {% endif %}
+    </div>  
+
+    <br style="clear:both" />
+
+    
+    <div style="border-style:solid; border-radius: 25px;border-width: 2px; border-color: #dbdbdb;">
+        <div style="overflow: auto;">
+            <div style="margin-left:20px;margin-top: 20px;float: left;">
+                <img style="text-align: center;max-width: 400px;max-height: 400px;border-radius: 25px;" src= "{{ info.imageurl }}">
+            </div>
+        
+            <div style="float: left;padding-left: 30%;margin-top: 20px;">
+                <h3 style="display:inline"> {{ info.description }}</h3>
+                
+                {% if post_vali %}
+                    
+                    <h2 style="display:inline">${{ info.price }}</h2>
+                    <div>
+                        <h4> Current Bid ${{ current_bid }}</h4>
+                            {% if user.is_authenticated %}
+                            <form action="{% url 'placebid' title=info.title num=info.item_num %}" method="POST">
+                                {% csrf_token %}
+                                <label for="bidamt">Bid Amount: </label>
+                                <input type="number" id="bidamt" name="bidamt"><br><br>
+                                <input type="submit" value="Place Bid">
+                            </form>
+                            {% else %}
+                                <strong>Please sign in to Place Bid</strong>
+                            {% endif %}
+
+                    </div>
+                {% else %}
+                    <div style="text-align: center;">
+                    <h2>The auction has been closed</h2>
+                    <h3 style="color:red">Item is sold to {{ winner_info }}</h3>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <br style="clear:both" /> 
+
+        <div style="margin-left:20px;margin-top: 20px;float: center;">
+            {% if user.is_authenticated %}
+                <h3 style="text-align: center;">Comments</h3>
+                <form action="{% url 'placecmt' title=info.title num=info.item_num %}" method="POST">
+                    {% csrf_token %}
+                    <div style="text-align: center;">
+                    <textarea name="comments" id="comments" style="font-family:sans-serif;font-size:1.2em;width: 80%;border-color: lightblue;border-radius: 30px;">   Please add comments</textarea>
+                    <input style="border-radius: 30px;border-style: hidden;" type="submit" value="Submit">
+                    </div>
+                </form>
+                {% for database in comment_data %}
+                    <div style="text-align: center;">
+                    <h4 style="display: inline;color: lightskyblue;"> {{ database.comment }}</h4> <h6 style="display: inline;">by ({{ database.user_name.username }})</h6>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% else %}
+                {% for database in comment_data %}
+                    <h3> {{ database.comment }}</h3> <h6>by ({{ database.user_name.username }})</h6>
+                {% endfor %} 
+            {% endif %}
+        </div>
+</div>
+{% endblock %}

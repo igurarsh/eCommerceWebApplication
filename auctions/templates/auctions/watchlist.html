@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<h1>Watchlist</h1>
+<ol>
+    {% for database in watch_data %}
+        <li><a href="{% url 'listingpage' title=database.listings.title num=database.listings.item_num %}">{{ database.listings.title }}</a></li>
+    {% endfor %}
+</ol>
+
+{% endblock %}

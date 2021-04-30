@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<h1>Select a Category</h1>
+
+<form action="{% url 'results' %}" method="POST">
+    {% csrf_token %}
+    {{ info_cat.Category }}
+    
+    {% if search_result %}
+        <h2>Search Results</h2>
+        <ol>
+            {% for database in search_result %}
+                <li><a href="{% url 'listingpage' title=database.title num=database.item_num %}">{{database.title }}</a></li>
+            {% endfor %}
+        </ol>
+    {% endif %}
+    <div style="margin-left: 10px;"><input type="submit"></div>
+</form>
+
+{% endblock %}

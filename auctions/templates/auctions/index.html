@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2 style="text-align: center;">Active Listings</h2>
+    {% for database in data_listing %}
+    <a href="{% url 'listingpage' title=database.title num=database.item_num %}" style="color:inherit"><div style="border-style: solid; border-width: 2px; border-color: #dbdbdb; border-radius: 25px;overflow: hidden;">
+                <div style="float: left;padding-left: 1%;"><img style="max-width: 300px;max-height: 200px; margin-top: 10px;margin-bottom: 10px; margin-left: 10px;margin-right: 10px; border-radius: 25px;" src= "{{ database.imageurl }}"></div>
+                    <div style="float: left;padding-left: 40%;padding-top: 2%;">
+                        <h3 >{{database.title }}</h3><p style="font-size:10px;">({{ database.category }})</p>
+                        <h5>{{ database.description }}</h5>
+                        <h4 style="display: inline-block;">Price: </h4><p style="display: inline-block;"> ${{ database.price }}</p>
+                    </div>
+            </div></a>
+            <br>
+    {% endfor %}
+{% endblock %}>
